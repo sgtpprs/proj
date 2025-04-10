@@ -1,0 +1,18 @@
+name: archive-state-daily-averages
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "7 20 * * *"
+
+jobs:
+  archive-state-daily-averages:
+    # runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Archive state daily averages
+      id: archive-state-daily-averages
+      run: |
+        RESPONSE=$(curl -s -D - -o /dev/null -I "https://web.archive.org/save/https://gasprices.aaa.com/state-gas-price-averages/")
+        URL=$(echo "$RESPONSE" | grep -i 'Location: http' | awk '{print $2}')
+        echo "Archived URL: $URL"
